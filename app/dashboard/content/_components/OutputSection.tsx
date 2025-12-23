@@ -1,6 +1,5 @@
-import React, { useEffect, useRef } from 'react'
+import React from 'react'
 import '@toast-ui/editor/dist/toastui-editor.css';
-import { Editor } from '@toast-ui/react-editor';
 import { Copy } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 
@@ -9,12 +8,7 @@ interface props{
 }
 
 function OutputSection({aiOutput}:props) {
-  const editorRef:any=useRef();
-
-  useEffect(()=>{
-    const editorInstance=editorRef.current.getInstance();
-    editorInstance.setMarkdown(aiOutput);
-  },[aiOutput])
+  // Render aiOutput directly; previously used toast-ui Editor instance which was removed
 
   return (
     <div className='bg-white shadow-lg border rounded-lg'>
@@ -24,14 +18,9 @@ function OutputSection({aiOutput}:props) {
         onClick={()=>navigator.clipboard.writeText(aiOutput)}
         ><Copy className='w-4 h-4'/> Copy </Button>
       </div>
-      <Editor
-        ref={editorRef}
-        initialValue="Your result will appear here"
-        initialEditType="wysiwyg"
-        height="600px"
-        useCommandShortcut={true}
-        onChange={()=>console.log(editorRef.current.getInstance().getMarkdown())}
-      />
+      <div className='p-5'>
+        <pre className='whitespace-pre-wrap break-words text-sm' aria-live="polite">{aiOutput || 'Your result will appear here'}</pre>
+      </div>
     </div>
   )
 }
